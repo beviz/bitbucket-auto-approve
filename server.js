@@ -2,6 +2,7 @@
 const
     http = require("http"),
     express = require("express"),
+    bodyParser = require('body-parser'),
     socketio = require("socket.io");
 
 const SERVER_PORT = process.env.PORT || 3000;
@@ -38,6 +39,21 @@ function startServer() {
     const server = http.createServer(app);
     // bind socket.io to that server
     const io = socketio(server);
+
+    app.use(bodyParser.json());
+    app.post('/commit', (req, res) => {
+      console.log('request params', req.params)
+      console.log('request body', req.body)
+      const username = req.body.username
+      const url = req.body.url
+
+      console.log('Got commit: username', url, 'url', url)
+
+      io.emit("broadcast", {
+        username: username,
+        url: url
+      })
+    })
 
     // example on how to serve static files from a given folder
     app.use(express.static("public"));
