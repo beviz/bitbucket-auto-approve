@@ -12,19 +12,19 @@ let onlineClients = new Set();
 function onNewWebsocketConnection(socket) {
     console.info(`Socket ${socket.id} has connected.`);
     onlineClients.add(socket.id);
-    socket.emit("online", onlineClients.size);
+    socket.broadcast.emit("online", onlineClients.size);
 
     socket.on("disconnect", () => {
         onlineClients.delete(socket.id);
         console.info(`Socket ${socket.id} has disconnected.`);
-        socket.emit("online", onlineClients.size);
+        socket.broadcast.emit("online", onlineClients.size);
     });
 
     // echoes on the terminal every "hello" message this socket sends
     // socket.on("hello", helloMsg => console.info(`Socket ${socket.id} says: "${helloMsg}"`));
     socket.on("commit", message => {
       console.log('got message', message)
-      socket.emit("broadcast", message)
+      socket.broadcast.emit("broadcast", message)
     });
 
     // will send a message only to this socket (different than using `io.emit()`, which would broadcast it)
