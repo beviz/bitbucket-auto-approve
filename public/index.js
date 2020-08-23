@@ -33,9 +33,9 @@
 
   socket.on('broadcast', message => {
     message = JSON.parse(message)
-    if (commitLog.includes(message.url)) {
-      return
-    }
+    // if (commitLog.includes(message.url)) {
+    //   return
+    // }
 
     if (!isPrPage(message.url)) {
       return

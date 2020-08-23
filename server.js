@@ -12,10 +12,12 @@ let onlineClients = new Set();
 function onNewWebsocketConnection(socket) {
     console.info(`Socket ${socket.id} has connected.`);
     onlineClients.add(socket.id);
+    socket.emit("online", onlineClients.size);
 
     socket.on("disconnect", () => {
         onlineClients.delete(socket.id);
         console.info(`Socket ${socket.id} has disconnected.`);
+        socket.emit("online", onlineClients.size);
     });
 
     // echoes on the terminal every "hello" message this socket sends
@@ -45,14 +47,6 @@ function startServer() {
 
     // important! must listen from `server`, not `app`, otherwise socket.io won't function correctly
     server.listen(SERVER_PORT, () => console.info(`Listening on port ${SERVER_PORT}.`));
-
-    // will send one message per second to all its clients
-    let secondsSinceServerStarted = 0;
-    setInterval(() => {
-        secondsSinceServerStarted++;
-        io.emit("seconds", secondsSinceServerStarted);
-        io.emit("online", onlineClients.size);
-    }, 1000);
 }
 
 startServer();
