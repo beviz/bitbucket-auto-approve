@@ -1,0 +1,9 @@
+module.exports = {
+  username: '',
+  password: '',
+  server: 'bitbucket-reviewer.herokuapp.com',
+  proxy: {
+    host: 'localhost',
+    port: 39120
+  }
+}
