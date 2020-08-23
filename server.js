@@ -4,7 +4,7 @@ const
     express = require("express"),
     socketio = require("socket.io");
 
-const SERVER_PORT = process.env.PORT || 80;
+const SERVER_PORT = process.env.PORT || 3000;
 
 let nextVisitorNumber = 1;
 let onlineClients = new Set();
