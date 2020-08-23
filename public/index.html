@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bitbucket Auto Approve</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+</head>
+<body>
+<div class="container-fluid">
+  <h4>Online count: <span id="online_count"></span></h4>
+  <form id="form" style="max-width:500px">
+    <div class="form-group">
+      <label for="username">Who am I</label>
+      <input type="text" class="form-control" id="username">
+    </div>
+    <div class="form-group">
+      <label for="url">URL</label>
+      <input type="text" class="form-control" id="url">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
+  <hr />
+  <h4>Logs</h4>
+  <ul id="logs">
+  </ul>
+</div>
+
+<!-- this link is magically provided by socket.io -->
+<script src="/socket.io/socket.io.js"></script>
+
+<script src="index.js"></script>
+
+</body>
+</html>
