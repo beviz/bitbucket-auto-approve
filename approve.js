@@ -41,8 +41,14 @@ const approve = function(message) {
     }
   }, function (error, response, body) {
     if (error) {
-      return console.error('Approve failed', error);
+      return console.error('Approve failed:', error);
     }
+
+    const jsonBody = JSON.parse(body)
+    if (jsonBody.errors) {
+      return console.error('Approve failed:', jsonBody.errors[0].message);
+    }
+
     console.log(`Approved ${message.username} ${message.url}`);
   })
 }
