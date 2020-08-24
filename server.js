@@ -42,17 +42,15 @@ function startServer() {
 
     app.use(bodyParser.json());
     app.post('/commit', (req, res) => {
-      console.log('request params', req.params)
-      console.log('request body', req.body)
       const username = req.body.username
       const url = req.body.url
 
-      console.log('Got commit: username', url, 'url', url)
-
+      console.log('Got commit:', username, url)
       io.emit("broadcast", {
         username: username,
         url: url
       })
+      res.json({})
     })
 
     // example on how to serve static files from a given folder
