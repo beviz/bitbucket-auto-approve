@@ -7,6 +7,10 @@ const
 
 const SERVER_PORT = process.env.PORT || 3000;
 
+const regex_to_extract = '.+\.com/projects/(.+)/repos/(.+)/pull-requests/(.+)/overview'
+
+
+
 let nextVisitorNumber = 1;
 let onlineClients = new Set();
 
@@ -48,6 +52,22 @@ function startServer() {
       console.log('Got commit:', username, url)
       io.emit("broadcast", {
         username: username,
+        url: url
+      })
+      res.json({})
+    })
+
+    app.post('/slack_commit', (req, res) => {
+      const url = req.body.url
+      const matches = url.match(regex_to_extract)
+      if (!matches) {
+        console.error(`URL ${url} is not a correct PR overview page`)
+        return res.json({})
+      }
+
+      console.log('Got commit from Slack:', url)
+      io.emit("broadcast", {
+        username: "slack",
         url: url
       })
       res.json({})
