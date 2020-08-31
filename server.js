@@ -45,7 +45,7 @@ function startServer() {
     const io = socketio(server);
 
     app.use(bodyParser.json({ type: 'application/json' }));
-    app.use(bodyParser.text({ type: 'text/*' }));
+    app.use(bodyParser.urlencoded());
     app.post('/commit', (req, res) => {
       const username = req.body.username
       const url = req.body.url
@@ -59,11 +59,13 @@ function startServer() {
     })
 
     app.post('/slack_commit', (req, res) => {
-      const url = req.body
+      console.log(req.body)
+      const url = req.body.text
       const matches = url.match(regex_to_extract)
       if (!matches) {
-        console.error(`URL ${url} is not a correct PR overview page`)
-        return res.json({})
+        error_msg = `URL: ${url} is not a correct PR overview page`
+        console.error(error_msg)
+        return res.send(error_msg)
       }
 
       console.log('Got commit from Slack:', url)
@@ -71,7 +73,7 @@ function startServer() {
         username: "slack",
         url: url
       })
-      res.json({})
+      res.send("Done")
     })
 
     // example on how to serve static files from a given folder
