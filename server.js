@@ -44,7 +44,8 @@ function startServer() {
     // bind socket.io to that server
     const io = socketio(server);
 
-    app.use(bodyParser.json());
+    app.use(bodyParser.json({ type: 'application/json' }));
+    app.use(bodyParser.text({ type: 'text/*' }));
     app.post('/commit', (req, res) => {
       const username = req.body.username
       const url = req.body.url
@@ -58,7 +59,7 @@ function startServer() {
     })
 
     app.post('/slack_commit', (req, res) => {
-      const url = req.body.url
+      const url = req.body
       const matches = url.match(regex_to_extract)
       if (!matches) {
         console.error(`URL ${url} is not a correct PR overview page`)
