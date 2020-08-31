@@ -58,6 +58,10 @@ function startServer() {
       res.json({})
     })
 
+    app.get('/hi', (req, res) => {
+      res.json({ message: 'Hallelujah!' })
+    })
+
     app.post('/slack_commit', (req, res) => {
       console.log(req.body)
       const url = req.body.text
