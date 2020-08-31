@@ -1,10 +1,10 @@
-const SocksProxyAgent = require('socks5-https-client/lib/Agent')
-const request = require('request')
 const io = require('socket.io-client')
 
-const data = require('./data')
+const config = require('./config')
+const { requestBitbucket } = require('./common')
 
-const socket = io(`wss://${data.server}`, { forceNew: true });
+const socket = io(`${config.server}`, { forceNew: true });
+
 socket.on('connect', () => {
   console.log('connected')
 })
@@ -17,7 +17,7 @@ socket.on("online", onlineCount => {
 })
 
 socket.on('broadcast', message => {
-  if (message.username === data.username) {
+  if (message.username === config.username) {
     return
   }
 
@@ -25,20 +25,9 @@ socket.on('broadcast', message => {
 })
 
 const approve = function(message) {
-  request.post({
-    url: message.url,
-    headers : {
-      'Content-Type': 'application/json'
-    },
-    auth: {
-      user: data.username,
-      password: data.password
-    },
-    agentClass: SocksProxyAgent,
-    agentOptions: {
-      socksHost: data.proxy.host,
-      socksPort: data.proxy.port
-    }
+  requestBitbucket({
+    method: 'POST',
+    url: message.url
   }, function (error, response, body) {
     if (error) {
       return console.error('Approve failed:', error);

@@ -3,7 +3,8 @@ const
     http = require("http"),
     express = require("express"),
     bodyParser = require('body-parser'),
-    socketio = require("socket.io");
+    socketio = require("socket.io"),
+    { convertToApiApproveUrl } = require('./common');
 
 const SERVER_PORT = process.env.PORT || 3000;
 
@@ -45,7 +46,7 @@ function startServer() {
     const io = socketio(server);
 
     app.use(bodyParser.json({ type: 'application/json' }));
-    app.use(bodyParser.urlencoded());
+    app.use(express.urlencoded({ extended: true }))
     app.post('/commit', (req, res) => {
       const username = req.body.username
       const url = req.body.url
@@ -64,26 +65,20 @@ function startServer() {
 
     app.post('/slack_commit', (req, res) => {
       console.log(req.body)
+
       const url = req.body.text
-      const matches = url.match(regex_to_extract)
-      if (!matches) {
+      const apiUrl = convertToApiApproveUrl(req.body.text)
+      if (!apiUrl) {
         error_msg = `URL: ${url} is not a correct PR overview page`
         console.error(error_msg)
+
         return res.send(error_msg)
       }
-
-      const apiPartial = {
-        workspace: matches[1],
-        repo: matches[2],
-        prId: matches[3]
-      }
-      const apiUrl = new URL(url)
-      apiUrl.pathname = `/rest/api/latest/projects/${apiPartial.workspace}/repos/${apiPartial.repo}/pull-requests/${apiPartial.prId}/approve`
 
       console.log('Got commit from Slack:', url)
       io.emit("broadcast", {
         username: "slack",
-        url: apiUrl.href
+        url: apiUrl
       })
       res.send("Done")
     })
