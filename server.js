@@ -68,10 +68,18 @@ function startServer() {
         return res.send(error_msg)
       }
 
+      const apiPartial = {
+        workspace: matches[1],
+        repo: matches[2],
+        prId: matches[3]
+      }
+      const apiUrl = new URL(url)
+      apiUrl.pathname = `/rest/api/latest/projects/${apiPartial.workspace}/repos/${apiPartial.repo}/pull-requests/${apiPartial.prId}/approve`
+
       console.log('Got commit from Slack:', url)
       io.emit("broadcast", {
         username: "slack",
-        url: url
+        url: apiUrl.href
       })
       res.send("Done")
     })
