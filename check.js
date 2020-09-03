@@ -7,7 +7,7 @@ const checkBitbucketConfig = function() {
     url: `${bitbucketHost}/rest/api/latest/profile/recent/repos`
   }, function (error, response, body) {
     if (error) {
-      return console.error('Invalid config, please check');
+      return console.error('Invalid config, please check', error);
     }
 
     const jsonBody = JSON.parse(body)

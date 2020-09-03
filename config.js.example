@@ -1,6 +1,5 @@
 module.exports = {
-  username: '',
-  password: '',
+  accessToken: '',
   server: 'https://bitbucket-reviewer.herokuapp.com',
   ssl: true,
   proxy: {

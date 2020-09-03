@@ -2,14 +2,10 @@ const SocksProxyAgent = require('socks5-https-client/lib/Agent')
 const request = require('request')
 const config = require('./config')
 
-const requestBitbucket = function(options, callback) {
+const getBitbuketRequestOptions = function() {
   const defaultOptions = {
     headers : {
       'Content-Type': 'application/json'
-    },
-    auth: {
-      user: config.username,
-      password: config.password
     },
     agentClass: SocksProxyAgent,
     agentOptions: {
@@ -17,7 +13,21 @@ const requestBitbucket = function(options, callback) {
       socksPort: config.proxy.port
     }
   }
-  options = { ...defaultOptions, ...options }
+
+  if (config.accessToken) {
+    defaultOptions.headers['Authorization'] = `Bearer ${config.accessToken}`
+  } else if (config.username) {
+    defaultOptions.auth = {
+      user: config.username,
+      password: config.password
+    }
+  }
+
+  return defaultOptions
+}
+
+const requestBitbucket = function(options, callback) {
+  options = { ...getBitbuketRequestOptions(), ...options }
   request(options, callback)
 }
 
