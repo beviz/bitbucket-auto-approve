@@ -9,11 +9,11 @@ if (!apiUrl) {
   return
 }
 
-console.log('Committing', data.username, apiUrl)
+console.log('Committing', apiUrl)
 requestServer('/commit', {
   method: 'POST',
   json: {
-    username: data.username,
+    username: 'client',
     url: apiUrl
   }
 }, function(err, httpResponse, body) {

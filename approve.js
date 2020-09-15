@@ -17,10 +17,6 @@ socket.on("online", onlineCount => {
 })
 
 socket.on('broadcast', message => {
-  if (message.username === config.username) {
-    return
-  }
-
   approve(message)
 })
 
