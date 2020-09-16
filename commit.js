@@ -1,6 +1,5 @@
 const { requestServer, convertToApiApproveUrl } = require('./common')
 
-const data = require('./data')
 const url = process.argv[2]
 
 const apiUrl = convertToApiApproveUrl(url)
