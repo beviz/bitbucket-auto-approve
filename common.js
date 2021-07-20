@@ -5,8 +5,10 @@ const getBitbuketRequestOptions = function() {
     const defaultOptions = {
         headers: {
             'Content-Type': 'application/json'
-        },
-        proxy: `http://${config.proxy.host}:${config.proxy.port}`
+        }
+    }
+    if (config.proxy) {
+        defaultOptions.proxy = `http://${config.proxy.host}:${config.proxy.port}`
     }
 
     if (config.accessToken) {
